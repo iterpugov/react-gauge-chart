@@ -2,7 +2,7 @@ import React from "react";
 import * as d3 from 'd3';
 import PropTypes from 'prop-types';
 
-import './style.css';
+// import './style.css';
 /*
 GaugeChart creates a gauge chart using D3
 The chart is responsive and will have the same width as the "container"
@@ -138,7 +138,7 @@ class GaugeChart extends React.Component {
         .attr("d", this.arc)
         .style("fill", function(d) { return d.data.color; });
 
-    this.drawNeedle(resize);
+    this.drawNeedle(this.props.animation && !resize);
     //Translate the needle starting point to the middle of the arc
     this.needle.attr("transform", "translate(" + this.outerRadius + ", " + this.outerRadius + ")");
   }
@@ -184,8 +184,8 @@ class GaugeChart extends React.Component {
     this.g.attr("transform", "translate(" + this.margin.left + ", " + this.margin.top + ")");
   }
   
-  //If 'resize' is true then the animation does not play
-  drawNeedle = (resize) => {
+  
+  drawNeedle = (animation) => {
     const { percent, needleColor, needleBaseColor, hideText } = this.props;
     const { container, calculateRotation } = this;
     var needleRadius = 15*(this.width / 500) ,   // Make the needle radius responsive
@@ -206,7 +206,7 @@ class GaugeChart extends React.Component {
       this.addText(percent);
     }
     //Rotate the needle
-    if(!resize){
+    if(animation){
       this.needle.transition()
       .delay(500)
       .ease(d3.easeElastic)
@@ -296,7 +296,8 @@ GaugeChart.defaultProps = {
   textColor: '#fff',
   needleColor: "#464A4F",
   needleBaseColor: "#464A4F",
-  hideText: false
+  hideText: false,
+  animation: false,
 }
 
 GaugeChart.propTypes = {
@@ -311,5 +312,6 @@ GaugeChart.propTypes = {
   textColor: PropTypes.string,
   needleColor: PropTypes.string,
   needleBaseColor: PropTypes.string,
-  hideText: PropTypes.bool
+  hideText: PropTypes.bool,
+  animation: PropTypes.bool
 }

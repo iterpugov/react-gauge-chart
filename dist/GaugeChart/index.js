@@ -11,8 +11,6 @@ var d3 = _interopRequireWildcard(require("d3"));
 
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
-require("./style.css");
-
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -36,6 +34,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// import './style.css';
 
 /*
 GaugeChart creates a gauge chart using D3
@@ -130,7 +130,7 @@ function (_React$Component) {
         return d.data.color;
       });
 
-      _this.drawNeedle(resize); //Translate the needle starting point to the middle of the arc
+      _this.drawNeedle(_this.props.animation && !resize); //Translate the needle starting point to the middle of the arc
 
 
       _this.needle.attr("transform", "translate(" + _this.outerRadius + ", " + _this.outerRadius + ")");
@@ -176,7 +176,7 @@ function (_React$Component) {
       _this.g.attr("transform", "translate(" + _this.margin.left + ", " + _this.margin.top + ")");
     });
 
-    _defineProperty(_assertThisInitialized(_this), "drawNeedle", function (resize) {
+    _defineProperty(_assertThisInitialized(_this), "drawNeedle", function (animation) {
       var _this$props = _this.props,
           percent = _this$props.percent,
           needleColor = _this$props.needleColor,
@@ -204,7 +204,7 @@ function (_React$Component) {
       } //Rotate the needle
 
 
-      if (!resize) {
+      if (animation) {
         _this.needle.transition().delay(500).ease(d3.easeElastic).duration(3000).tween('progress', function () {
           return function (percentOfPercent) {
             var progress = percentOfPercent * percent;
@@ -355,7 +355,8 @@ GaugeChart.defaultProps = {
   textColor: '#fff',
   needleColor: "#464A4F",
   needleBaseColor: "#464A4F",
-  hideText: false
+  hideText: false,
+  animation: false
 };
 GaugeChart.propTypes = {
   id: _propTypes.default.string.isRequired,
@@ -369,5 +370,6 @@ GaugeChart.propTypes = {
   textColor: _propTypes.default.string,
   needleColor: _propTypes.default.string,
   needleBaseColor: _propTypes.default.string,
-  hideText: _propTypes.default.bool
+  hideText: _propTypes.default.bool,
+  animation: _propTypes.default.bool
 };
